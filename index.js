@@ -4,11 +4,11 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const handle=require('./handlers');
-const routes
+const routes = require('./routes');
+// server created
 const app = express();
-
+//basic middle ware
 app.use(cors());
-
 app.use(bodyParser.json);
 
 const port = process.env.PORT || 4000;
@@ -18,7 +18,7 @@ app.get('/',function(req,res){
 });
 //middleware
 app.use('/api/auth',routes.auth);
-app.use('/api/class',routes.auth);
+app.use('/api/class',routes.course);
 //error control 
 app.use(handle.notFound);
 app.use(handle.errors);
