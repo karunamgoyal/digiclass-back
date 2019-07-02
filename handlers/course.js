@@ -2,7 +2,7 @@ const db = require('../models');
 //Return a list of Courses
 exports.showCourses = async (req,res,next)=>{
     try {
-        const courses = await db.Course.find().populate('user',['username','id']);
+        const courses = await db.Course.Course.find();
         res.status(200).json(courses);
     } catch (err) {
         err.satus= 400;
@@ -12,7 +12,7 @@ exports.showCourses = async (req,res,next)=>{
 exports.userCourses = async (req,res,next)=>{
     try {
         const {id} = req.decoded;
-        const user = await db.User.findById(id).populate('courses');
+        const user = await db.User.findById(id);
         res.status(200).json(user.courses);
     } catch (err) {
         err.satus= 400;
@@ -23,8 +23,8 @@ exports.createCourse = async (req,res,next)=>{
     try {
         const {id} = req.decoded;
         const user = await db.User.findById(id);
-        const {user,courseid} = req.body;
-        const course = await db.Course.create({
+        const {courseid} = req.body;
+        const course = await db.Course.Course.create({
             user,
             courseid
         });
@@ -42,10 +42,9 @@ exports.createCourse = async (req,res,next)=>{
 exports.getCourse = async (req,res,next)=>{
     try {
         const {id} = req.params;
-        const course = await db.Course.findById(id)
-        .populate('user',['username','id']);
+        const course = await db.Course.Course.findById(id)
         if(!course)   throw new Error('No Course Found');
-        res.status(200).json(poll);    
+        res.status(200).json(course);    
 
     } catch (err) {
         err.satus= 400;
@@ -56,7 +55,7 @@ exports.enroll = async (req,res,next)=>{
     try {
         const {id:userid} = req.decoded;
         const {id:courseid} = req.params;
-        const course = await db.Course.findById(courseid)
+        const course = await db.Course.Course.findById(courseid)
         if(!course)   throw new Error('No Course Found');
         var flag = true;
         for(var i =0;i<course.students.length;i++){
@@ -69,6 +68,7 @@ exports.enroll = async (req,res,next)=>{
         if(flag){
             course.students.push(userid);
             await course.save();
+            res.status(201).json(course);
         }
         else{
             throw new Error('Already Enrolled');
@@ -82,16 +82,17 @@ exports.enroll = async (req,res,next)=>{
 };
 exports.post = async (req,res,next)=>{
     try {
-        const {id :courseid} = req.params;
+        const {id :coursei} = req.params;
         const {id :userid} = req.decoded;
-        const {postdata} = req.body; 
-        if(postdata){
+        const { post }= req.body;
+        if(post){
+            
             const user = await db.User.findById(userid);
-            const course = await db.Course.findById(courseid);
+            const course = await db.Course.Course.findById(coursei);
             if(!course) throw new Error("No Course Found");
-            const post = await db.post.create({
+            const Post = await db.Course.Post.create({
                 user,
-                postdata
+                post
             });
             var flag = false;
             for(var i =0;i<course.students.length;i++){
@@ -102,13 +103,17 @@ exports.post = async (req,res,next)=>{
         
             }
             if(flag||course.user._id==userid){
-                course.post.push(post);
+                course.posts.push(Post);
                 await course.save();
+                res.status(201).json(course);
             }
             else{
                 throw new Error('Not Enrolled in this Course');
             }
 
+        }
+        else{
+            throw new Error("Enter some data");
         }
 
     } catch (err) {

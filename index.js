@@ -9,7 +9,7 @@ const routes = require('./routes');
 const app = express();
 //basic middle ware
 app.use(cors());
-app.use(bodyParser.json);
+app.use(bodyParser.json());
 
 const port = process.env.PORT || 4000;
 //test app
@@ -17,6 +17,7 @@ app.get('/',function(req,res){
     res.send("Hello world");
 });
 //middleware
+
 app.use('/api/auth',routes.auth);
 app.use('/api/class',routes.course);
 //error control 
