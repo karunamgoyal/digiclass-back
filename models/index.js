@@ -8,3 +8,4 @@ mongoose.connect(mongodburl, { useNewUrlParser: true });
 
 module.exports.User = require('./user');
 module.exports.Course = require('./course');
+module.exports.Chat = require('./chat');

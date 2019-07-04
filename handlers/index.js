@@ -1,6 +1,7 @@
 module.exports={
     ...require('./auth'),
-    ...require('./course')
+    ...require('./course'),
+    ...require('./chat')
 }
 module.exports.errors=(err,req,res,next)=>{
     res.status(err.status||400).json({
