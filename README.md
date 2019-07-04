@@ -6,7 +6,7 @@ For running the server <br/>
   <li>You have to have Mongod enterprise installed on your machine <a href="https://www.mongodb.com/lp/download/mongodb-enterprise-developer">Check this link for installation</a></li>
   <li>Git clone repository</li>
   <li>go to directory and run "npm install" in terminal</li>
-  <li>run mongod service according to you OS</li>
+  <li>run mongod service according to your OS</li>
   <li>Then "node index"</li>
 </ul>
 Api links checked using Postman<br/>
